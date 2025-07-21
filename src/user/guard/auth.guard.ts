@@ -30,6 +30,10 @@ export class AuthGuard implements CanActivate {
       const payload = await this.jwtService.verifyAsync(token, {
         secret: process.env.JWT_SECRET,
       });
+      if (payload._id && payload.role.toLowerCase() === 'admin') {
+        request['user'] = payload;
+        return true;
+      }
       if (
         !payload.role ||
         payload.role == '' ||

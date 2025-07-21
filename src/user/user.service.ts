@@ -119,4 +119,65 @@ export class UserService {
       message: 'User deleted successfully',
     };
   }
+
+  async getMe(payload) {
+    if (!payload._id) {
+      throw new NotFoundException('user not find');
+    }
+
+    const user = await this.userModel
+      .findById(payload._id)
+      .select('-password -__v');
+    if (!user) {
+      throw new NotFoundException('user not find');
+    }
+    return {
+      status: 200,
+      data: user,
+    };
+  }
+
+  // User Can Update Data
+  async updateMe(payload, updateUserDto: UpdateUserDto) {
+    if (!payload._id) {
+      throw new NotFoundException('user not find');
+    }
+    const user = await this.userModel
+      .findById(payload._id)
+      .select('-password -__v');
+    if (!user) {
+      throw new NotFoundException('user not find');
+    }
+    // let user1 = {
+    //   ...updateUserDto,
+    // };
+    if (updateUserDto.password) {
+      const password = await bcrypt.hash(updateUserDto.password, saltOrRounds);
+      updateUserDto = {
+        // ...user1,
+        password,
+      };
+    }
+    return {
+      status: 200,
+      data: await this.userModel
+        .findByIdAndUpdate(payload._id, updateUserDto, {
+          new: true,
+        })
+        .select('-password -__v'),
+    };
+  }
+  // User Can unActive Account
+  async deleteMe(payload) {
+    if (!payload._id) {
+      throw new NotFoundException('user not find');
+    }
+    const user = await this.userModel
+      .findById(payload._id)
+      .select('-password -__v');
+    if (!user) {
+      throw new NotFoundException('user not find');
+    }
+    await this.userModel.findByIdAndUpdate(payload._id, { active: false });
+  }
 }
