@@ -4,18 +4,30 @@ import { UserModule } from './user/user.module';
 import { JwtModule } from '@nestjs/jwt';
 import { ConfigModule } from '@nestjs/config';
 import { AuthModule } from './auth/auth.module';
+import { MailerModule } from '@nestjs-modules/mailer';
 
 @Module({
   imports: [
     ConfigModule.forRoot(),
-    MongooseModule.forRoot("mongodb+srv://mustafa3:HQoSAkO7FGa1A81C@cluster0.tigmoa7.mongodb.net/ecommerceN?retryWrites=true&w=majority"),
+    MongooseModule.forRoot(
+      'mongodb+srv://mustafa3:HQoSAkO7FGa1A81C@cluster0.tigmoa7.mongodb.net/ecommerceN?retryWrites=true&w=majority',
+    ),
     JwtModule.register({
       global: true,
-      secret:process.env.JWT_SECRET,
+      secret: process.env.JWT_SECRET,
       signOptions: { expiresIn: '60s' },
     }),
     UserModule,
     AuthModule,
+    MailerModule.forRoot({
+      transport: {
+        service: 'gmail',
+        auth: {
+          user: process.env.EMAIL_USERNAME,
+          pass: process.env.EMAIL_PASSWORD,
+        },
+      },
+    }),
   ],
   controllers: [],
   providers: [],
