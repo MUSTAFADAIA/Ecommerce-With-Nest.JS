@@ -7,8 +7,7 @@ import { Cart } from 'src/cart/cart.schema';
 import { Tax } from 'src/tax/tax.schema';
 import { Product } from 'src/product/product.schema';
 import { MailerService } from '@nestjs-modules/mailer';
-// eslint-disable-next-line @typescript-eslint/no-require-imports
-const stripe = require('stripe')(process.env.STRIPE_SECRET_KEY);
+const stripe = require('stripe');
 
 @Injectable()
 export class OrderService {
