@@ -8,9 +8,7 @@ import { Tax } from 'src/tax/tax.schema';
 import { Product } from 'src/product/product.schema';
 import { MailerService } from '@nestjs-modules/mailer';
 // eslint-disable-next-line @typescript-eslint/no-require-imports
-const stripe = require('stripe')(
-  process.env.STRIPE_SECRET_KEY ,
-);
+const stripe = require('stripe')(process.env.STRIPE_SECRET_KEY);
 
 @Injectable()
 export class OrderService {
@@ -174,7 +172,8 @@ export class OrderService {
         .findOne({ user: order.user.toString() })
         .populate('cartItems.productId user');
       if (!cart) {
-        throw new NotFoundException('Cart not found');}
+        throw new NotFoundException('Cart not found');
+      }
       cart.cartItems.forEach(async (item) => {
         await this.productModel.findByIdAndUpdate(
           item.productId,
@@ -257,7 +256,8 @@ export class OrderService {
           .findOne({ user: order.user.toString() })
           .populate('cartItems.productId user');
         if (!cart) {
-          throw new NotFoundException('Cart not found');}
+          throw new NotFoundException('Cart not found');
+        }
 
         cart.cartItems.forEach(async (item) => {
           await this.productModel.findByIdAndUpdate(
