@@ -7,7 +7,7 @@ import { Cart } from 'src/cart/cart.schema';
 import { Tax } from 'src/tax/tax.schema';
 import { Product } from 'src/product/product.schema';
 import { MailerService } from '@nestjs-modules/mailer';
-const stripe = require('stripe');
+const stripe = require('stripe')(process.env.STRIPE_SECRET_KEY);
 
 @Injectable()
 export class OrderService {
