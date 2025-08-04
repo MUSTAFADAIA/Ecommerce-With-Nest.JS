@@ -20,7 +20,9 @@ import { UploadFilesModule } from './upload-files/upload-files.module';
 
 @Module({
   imports: [
-    ConfigModule.forRoot(),
+    ConfigModule.forRoot({
+      isGlobal: true, 
+    }),
     MongooseModule.forRoot(
       process.env.DB_URL||'12315',
     ),

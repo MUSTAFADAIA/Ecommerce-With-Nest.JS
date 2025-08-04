@@ -9,7 +9,7 @@ import { Product } from 'src/product/product.schema';
 import { MailerService } from '@nestjs-modules/mailer';
 // eslint-disable-next-line @typescript-eslint/no-require-imports
 const stripe = require('stripe')(
- 'sk_test_51RrYvILZYpWDS40fPtz9Z5dGdEkegmxdZ0YXEtC05T3m6f0CvMMNVPRuYcbb0mAjkAlb1t0poR1RpfxD297tlbpO003Mtco0YC'
+  process.env.STRIPE_SECRET_KEY || 'fkfkfkf',
 );
 
 @Injectable()
