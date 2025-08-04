@@ -15,12 +15,14 @@ import { TaxModule } from './tax/tax.module';
 import { ProductModule } from './product/product.module';
 import { ReviewModule } from './review/review.module';
 import { CartModule } from './cart/cart.module';
+import { OrderModule } from './order/order.module';
+import { UploadFilesModule } from './upload-files/upload-files.module';
 
 @Module({
   imports: [
     ConfigModule.forRoot(),
     MongooseModule.forRoot(
-      'mongodb+srv://mustafa3:HQoSAkO7FGa1A81C@cluster0.tigmoa7.mongodb.net/ecommerceN?retryWrites=true&w=majority',
+      process.env.DB_URL||'12315',
     ),
     JwtModule.register({
       global: true,
@@ -48,6 +50,8 @@ import { CartModule } from './cart/cart.module';
     ProductModule,
     ReviewModule,
     CartModule,
+    OrderModule,
+    UploadFilesModule,
   ],
   controllers: [],
   providers: [],
