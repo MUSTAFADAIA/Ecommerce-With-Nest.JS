@@ -1,8 +1,8 @@
 import { Body, Controller, Param, Post, ValidationPipe } from '@nestjs/common';
 import { AuthService } from './auth.service';
-import { ResetPasswordDto, SignInDto, SignUpDto } from './dto/auth.dto';
+import {  ResetPasswordDto, SignInDto, SignUpDto } from './dto/auth.dto';
 
-@Controller('auth')
+@Controller('v1/auth')
 export class AuthController {
   constructor(private readonly authService: AuthService) {}
   //  @docs   Sign Up
@@ -25,8 +25,7 @@ export class AuthController {
   ) {
     return this.authService.signIn(signInDto);
   }
-
-   //  @docs   Any User Can Reset Password
+  //  @docs   Any User Can Reset Password
   //  @Route  POST /api/v1/auth/reset-password
   //  @access Public
   @Post('reset-password')
@@ -36,7 +35,6 @@ export class AuthController {
   ) {
     return this.authService.resetPassword(email);
   }
-
   //  @docs   Any User Can Virify Code
   //  @Route  POST /api/v1/auth/virify-code
   //  @access Public
@@ -62,5 +60,11 @@ export class AuthController {
     return this.authService.changePassword(changePasswordData);
   }
 
+  //  @docs   Any User Can loged can refresh token
+  //  @Route  POST /api/v1/auth/refresh-token/:refresh_token
+  //  @access Private for users=> admin, user (loged)
+  @Post('refresh-token/:refresh_token')
+  refreshToken(@Param('refresh_token') refresh_token: string) {
+    return this.authService.refreshToken(refresh_token);
+  }
 }
-

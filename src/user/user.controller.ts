@@ -10,76 +10,78 @@ import {
   UseGuards,
   Query,
   Req,
+  UseFilters,
 } from '@nestjs/common';
 import { UserService } from './user.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
-import { AuthGuard } from './guard/auth.guard';
-import { Roles } from './decorator/roles.decorator';
 
-@Controller('user')
+import { I18n, I18nContext, I18nValidationExceptionFilter } from 'nestjs-i18n';
+import { Roles } from './decorator/roles.decorator';
+import { AuthGuard } from './guard/auth.guard';
+
+@Controller('v1/user')
 export class UserController {
   constructor(private readonly userService: UserService) {}
 
-  //@desc   Post list of user
-  //@route   Post/api/v1/user
-  //@access   Private [admin]
+  //  @docs   Admin Can Create User
+  //  @Route  POST /api/v1/user
+  //  @access Private [admin]
   @Post()
   @Roles(['admin'])
   @UseGuards(AuthGuard)
+  @UseFilters(new I18nValidationExceptionFilter())
   create(
-    @Body(new ValidationPipe({ transform: true, forbidNonWhitelisted: true }))
+    @Body(new ValidationPipe({ forbidNonWhitelisted: true }))
     createUserDto: CreateUserDto,
+    @I18n() i18n: I18nContext,
   ) {
-    return this.userService.create(createUserDto);
+    return this.userService.create(createUserDto, i18n);
   }
-
-  //@desc   Get all of user
-  //@route   Get/api/v1/user
-  //@access   Private [admin]
+  //  @docs   Admin Can Get All Users
+  //  @Route  GET /api/v1/user
+  //  @access Private [admin]
   @Get()
   @Roles(['admin'])
   @UseGuards(AuthGuard)
-  findAll(@Query() query,) {
-    return this.userService.findAll(query);
+  findAll(@Query() query, @I18n() i18n: I18nContext) {
+    return this.userService.findAll(query, i18n);
   }
-
-  //@desc   Get one of user
-  //@route   Get/api/v1/user/:id
-  //@access   Private [admin]
+  //  @docs   Admin Can Get Single User
+  //  @Route  GET /api/v1/user/:id
+  //  @access Private [admin]
   @Get(':id')
   @Roles(['admin'])
   @UseGuards(AuthGuard)
-  findOne(@Param('id') id: string) {
-    return this.userService.findOne(id);
+  findOne(@Param('id') id: string, @I18n() i18n: I18nContext) {
+    return this.userService.findOne(id, i18n);
   }
-
-  //@desc   Update one of user
-  //@route   Update/api/v1/user/:id
-  //@access   Private [admin]
+  //  @docs   Admin Can Update Single User
+  //  @Route  UPDATE /api/v1/user/:id
+  //  @access Private [admin]
   @Patch(':id')
   @Roles(['admin'])
   @UseGuards(AuthGuard)
   update(
     @Param('id') id: string,
-    @Body(new ValidationPipe({ transform: true, forbidNonWhitelisted: true }))
+    @Body(new ValidationPipe({ forbidNonWhitelisted: true }))
     updateUserDto: UpdateUserDto,
+    @I18n() i18n: I18nContext,
   ) {
-    return this.userService.update(id, updateUserDto);
+    return this.userService.update(id, updateUserDto, i18n);
   }
-
-  //@desc   Delete one of user
-  //@route   Delete/api/v1/user/:id
-  //@access   Private [admin]
+  //  @docs   Admin Can Delete Single User
+  //  @Route  DELETE /api/v1/user/:id
+  //  @access Private [admin]
   @Delete(':id')
   @Roles(['admin'])
   @UseGuards(AuthGuard)
-  remove(@Param('id') id: string) {
-    return this.userService.remove(id);
+  remove(@Param('id') id: string, @I18n() i18n: I18nContext) {
+    return this.userService.remove(id, i18n);
   }
 }
 
-@Controller('userMe')
+@Controller('v1/userMe')
 export class UserMeController {
   constructor(private readonly userService: UserService) {}
 
@@ -90,10 +92,10 @@ export class UserMeController {
   @Get()
   @Roles(['user', 'admin'])
   @UseGuards(AuthGuard)
-  getMe(@Req() req) {
-    return this.userService.getMe(req.user);
+  getMe(@Req() req, @I18n() i18n: I18nContext) {
+    return this.userService.getMe(req.user, i18n);
   }
-//  @docs   Any User can update data on your account
+  //  @docs   Any User can update data on your account
   //  @Route  PATCH /api/v1/user/me
   //  @access Private [user, admin]
   @Patch()
@@ -102,8 +104,10 @@ export class UserMeController {
   updateMe(
     @Req() req,
     @Body(new ValidationPipe({ forbidNonWhitelisted: true }))
-    updateUserDto: UpdateUserDto  ) {
-    return this.userService.updateMe(req.user, updateUserDto);
+    updateUserDto: UpdateUserDto,
+    @I18n() i18n: I18nContext,
+  ) {
+    return this.userService.updateMe(req.user, updateUserDto, i18n);
   }
   //  @docs   Any User can unActive your account
   //  @Route  DELETE /api/v1/user/me
@@ -111,7 +115,7 @@ export class UserMeController {
   @Delete()
   @Roles(['user'])
   @UseGuards(AuthGuard)
-  deleteMe(@Req() req) {
-    return this.userService.deleteMe(req.user);
+  deleteMe(@Req() req, @I18n() i18n: I18nContext) {
+    return this.userService.deleteMe(req.user, i18n);
   }
 }

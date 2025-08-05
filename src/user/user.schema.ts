@@ -6,28 +6,28 @@ export type UserDocument = HydratedDocument<User>;
 @Schema({ timestamps: true })
 export class User {
   @Prop({
-    required: true,
     type: String,
+    required: true,
     min: [3, 'Name must be at least 3 characters'],
-    max: [30, 'Nmem must be be last at 30 characters'],
+    max: [30, 'Name must be at most 30 characters'],
   })
   name: string;
   @Prop({
-    required: true,
     type: String,
+    required: true,
     unique: true,
   })
   email: string;
   @Prop({
-    required: true,
     type: String,
+    required: true,
     min: [3, 'password must be at least 3 characters'],
-    max: [20, 'password must be be last at 20 characters'],
+    max: [20, 'password must be at most 20 characters'],
   })
   password: string;
   @Prop({
-    required: true,
     type: String,
+    required: true,
     enum: ['user', 'admin'],
   })
   role: string;
@@ -55,7 +55,7 @@ export class User {
   @Prop({
     type: String,
   })
-  VerificationCode: string;
+  verificationCode: string;
   @Prop({
     type: String,
     enum: ['male', 'female'],
@@ -63,4 +63,4 @@ export class User {
   gender: string;
 }
 
-export const UserSchema = SchemaFactory.createForClass(User);
+export const userSchema = SchemaFactory.createForClass(User);

@@ -17,22 +17,47 @@ import { ReviewModule } from './review/review.module';
 import { CartModule } from './cart/cart.module';
 import { OrderModule } from './order/order.module';
 import { UploadFilesModule } from './upload-files/upload-files.module';
+import {
+  AcceptLanguageResolver,
+  HeaderResolver,
+  I18nModule,
+  QueryResolver,
+} from 'nestjs-i18n';
+import { join } from 'path';
+import { ThrottlerModule } from '@nestjs/throttler';
+import { OAuthModule } from './oauth/oauth.module';
 
 @Module({
   imports: [
-    ConfigModule.forRoot({
-      isGlobal: true, 
+    ThrottlerModule.forRoot([
+      {
+        ttl: 60000,
+        limit: 10,
+      },
+    ]),
+    I18nModule.forRoot({
+      fallbackLanguage: 'en',
+      loaderOptions: {
+        path: join(__dirname, '/apps/api/i18n/'),
+        watch: true,
+      },
+      resolvers: [
+        { use: QueryResolver, options: ['lang'] },
+        AcceptLanguageResolver,
+        new HeaderResolver(['x-lang']),
+      ],
     }),
-    MongooseModule.forRoot(
-      process.env.DB_URL||'12315',
-    ),
+
+    ConfigModule.forRoot(),
+    MongooseModule.forRoot(process.env.DB_URL || '12315'),
+    UserModule,
     JwtModule.register({
       global: true,
       secret: process.env.JWT_SECRET,
-      signOptions: { expiresIn: '600000000000000005s' },
+      signOptions: { expiresIn: '1d' },
     }),
-    UserModule,
     AuthModule,
+    OAuthModule,
     MailerModule.forRoot({
       transport: {
         service: 'gmail',
