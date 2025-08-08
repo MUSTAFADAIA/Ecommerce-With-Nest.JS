@@ -16,8 +16,10 @@ import { CreateReviewDto } from './dto/create-review.dto';
 import { UpdateReviewDto } from './dto/update-review.dto';
 import { Roles } from 'src/user/decorator/roles.decorator';
 import { AuthGuard } from 'src/user/guard/auth.guard';
+import { ApiTags, ApiOperation, ApiResponse } from '@nestjs/swagger';
 
 
+@ApiTags('Review')
 @Controller('review')
 export class ReviewController {
   constructor(private readonly reviewService: ReviewService) {}
@@ -26,6 +28,8 @@ export class ReviewController {
   //  @Route  POST /api/v1/review
   //  @access Private [User]
   @Post()
+  @ApiOperation({ summary: 'Create a new review' })
+  @ApiResponse({ status: 201, description: 'Review created successfully' })
   @Roles(['user'])
   @UseGuards(AuthGuard)
   create(
@@ -44,6 +48,8 @@ export class ReviewController {
   //  @Route  GET /api/v1/review
   //  @access Public
   @Get(':id')
+  @ApiOperation({ summary: 'Get all reviews for a specific product' })
+  @ApiResponse({ status: 200, description: 'Reviews retrieved successfully' })
   findAll(@Param('id') prodcut_id: string) {
     return this.reviewService.findAll(prodcut_id);
   }
@@ -52,6 +58,8 @@ export class ReviewController {
   //  @Route  PATCH /api/v1/review
   //  @access Private [User]
   @Patch(':id')
+  @ApiOperation({ summary: 'Update a review' })
+  @ApiResponse({ status: 200, description: 'Review updated successfully' })
   @Roles(['user'])
   @UseGuards(AuthGuard)
   update(
@@ -73,6 +81,8 @@ export class ReviewController {
   //  @Route  DELETE /api/v1/review
   //  @access Private [User]
   @Delete(':id')
+  @ApiOperation({ summary: 'Delete a review' })
+  @ApiResponse({ status: 200, description: 'Review deleted successfully' })
   @Roles(['user'])
   @UseGuards(AuthGuard)
   remove(@Param('id') id: string, @Req() req) {
@@ -82,7 +92,9 @@ export class ReviewController {
     const user_id = req.user._id;
     return this.reviewService.remove(id, user_id);
   }
+
 }
+@ApiTags('Review Dashboard')
 @Controller('dashbourd/review')
 export class ReviewDashbourdController {
   constructor(private readonly reviewService: ReviewService) {}
@@ -91,6 +103,8 @@ export class ReviewDashbourdController {
   //  @Route  GET /api/v1/review
   //  @access Private [Admin]
   @Get(':id')
+  @ApiOperation({ summary: 'Get all reviews for a specific user' })
+  @ApiResponse({ status: 200, description: 'User reviews retrieved successfully' })
   @Roles(['admin'])
   @UseGuards(AuthGuard)
   findOne(@Param('id') user_id: string) {

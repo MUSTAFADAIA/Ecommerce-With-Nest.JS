@@ -3,7 +3,8 @@ import { TaxService } from './tax.service';
 import { CreateTexDto } from './dto/create-tax.dto';
 import { Roles } from 'src/user/decorator/roles.decorator';
 import { AuthGuard } from 'src/user/guard/auth.guard';
-
+import { ApiTags, ApiOperation, ApiResponse } from '@nestjs/swagger';
+@ApiTags('Tax')
 
 @Controller('tex')
 export class TaxController {
@@ -13,6 +14,8 @@ export class TaxController {
   //  @Route  POST /api/v1/tex
   //  @access Private [admin]
   @Post()
+  @ApiOperation({ summary: 'Create or update tax' })
+  @ApiResponse({ status: 201, description: 'Tax created or updated successfully' })
   @Roles(['admin'])
   @UseGuards(AuthGuard)
   create(@Body() createTexDto: CreateTexDto) {
@@ -23,6 +26,8 @@ export class TaxController {
   //  @Route  GET /api/v1/tex
   //  @access Private [admin]
   @Get()
+  @ApiOperation({ summary: 'Get tax details' })
+  @ApiResponse({ status: 200, description: 'Tax details retrieved successfully' })
   @Roles(['admin'])
   @UseGuards(AuthGuard)
   find() {
@@ -33,6 +38,8 @@ export class TaxController {
   //  @Route  DELETE /api/v1/tex
   //  @access Private [admin]
   @Delete()
+  @ApiOperation({ summary: 'Reset tax details' })
+  @ApiResponse({ status: 200, description: 'Tax details reset successfully' })
   @Roles(['admin'])
   @UseGuards(AuthGuard)
   reSet() {

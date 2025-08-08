@@ -155,9 +155,20 @@ export class UserService {
       status: 200,
       message: await i18n.t('service.UPDATED_SUCCESS', {
         args: { updated_name: i18n.lang === 'en' ? 'User' : 'المستخدم' }}),
-      data: await this.userModel.findByIdAndUpdate(id, user, {
-        new: true,
-      }),
+      data: await (async () => {
+        // Ensure the updated user is not null
+        const updatedUser = await this.userModel.findByIdAndUpdate(id, user, {
+          new: true,
+        }).select('-password -__v');
+        if (!updatedUser) {
+          throw new NotFoundException(
+            await i18n.t('service.NOT_FOUND', {
+              args: { not_found_name: i18n.lang === 'en' ? 'User' : 'المستخدم' },
+            }),
+          );
+        }
+        return updatedUser;
+      })(),
     };
   }
 

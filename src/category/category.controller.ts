@@ -14,8 +14,10 @@ import { CreateCategoryDto } from './dto/create-category.dto';
 import { UpdateCategoryDto } from './dto/update-category.dto';
 import { AuthGuard } from 'src/user/guard/auth.guard';
 import { Roles } from 'src/user/decorator/roles.decorator';
+import { ApiTags, ApiOperation, ApiResponse } from '@nestjs/swagger';
 
 
+@ApiTags('Category')
 @Controller('category')
 export class CategoryController { 
   constructor(private readonly categoryService: CategoryService) {}
@@ -24,6 +26,8 @@ export class CategoryController {
   //  @Route  POST /api/v1/category
   //  @access Private [Amdin]
   @Post()
+  @ApiOperation({ summary: 'Create a new category' })
+  @ApiResponse({ status: 201, description: 'Category created successfully' })
   @Roles(['admin'])
   @UseGuards(AuthGuard)
   create(
@@ -37,6 +41,8 @@ export class CategoryController {
   //  @Route  GET /api/v1/category
   //  @access Public
   @Get()
+  @ApiOperation({ summary: 'Get all categories' })
+  @ApiResponse({ status: 200, description: 'Categories retrieved successfully' })
   findAll() {
     return this.categoryService.findAll();
   }
@@ -45,6 +51,8 @@ export class CategoryController {
   //  @Route  GET /api/v1/category/:id
   //  @access Public
   @Get(':id')
+  @ApiOperation({ summary: 'Get a specific category by ID' })
+  @ApiResponse({ status: 200, description: 'Category retrieved successfully' })
   findOne(@Param('id') id: string) {
     return this.categoryService.findOne(id);
   }
@@ -53,6 +61,8 @@ export class CategoryController {
   //  @Route  UPDATE /api/v1/category/:id
   //  @access Private [Amdin]
   @Patch(':id')
+  @ApiOperation({ summary: 'Update a category' })
+  @ApiResponse({ status: 200, description: 'Category updated successfully' })
   @Roles(['admin'])
   @UseGuards(AuthGuard)
   update(
@@ -67,6 +77,8 @@ export class CategoryController {
   //  @Route  DELETE /api/v1/category/:id
   //  @access Private [Amdin]
   @Delete(':id')
+  @ApiOperation({ summary: 'Delete a category' }) 
+  @ApiResponse({ status: 200, description: 'Category deleted successfully' })
   @Roles(['admin'])
   @UseGuards(AuthGuard)
   remove(@Param('id') id: string) {

@@ -15,7 +15,8 @@ import { CartService } from './cart.service';
 import { Roles } from 'src/user/decorator/roles.decorator';
 import { AuthGuard } from 'src/user/guard/auth.guard';
 import { UpdateCartItemsDto } from './dto/update-cart.dto';
-
+import { ApiTags, ApiOperation, ApiResponse } from '@nestjs/swagger';
+@ApiTags('Cart')
 
 @Controller('cart')
 export class CartController {
@@ -26,6 +27,9 @@ export class CartController {
   //  @Route  POST /api/v1/cart/:productId
   //  @access Private [User]
   @Post(':productId')
+  @ApiOperation({ summary: 'Create a cart and add product to it' })
+  @ApiResponse({ status: 201, description: 'Cart created successfully' })
+  @ApiResponse({ status: 401, description: 'Unauthorized' })
   @Roles(['user'])
   @UseGuards(AuthGuard)
   create(@Param('productId') productId: string, @Req() req) {
@@ -40,6 +44,9 @@ export class CartController {
   //  @Route  POST /api/v1/cart/coupon
   //  @access Private [User]
   @Post('/coupon/:couponName')
+  @ApiOperation({ summary: 'Apply a coupon to the cart' })
+  @ApiResponse({ status: 200, description: 'Coupon applied successfully' })
+  @ApiResponse({ status: 401, description: 'Unauthorized' })
   @Roles(['user'])
   @UseGuards(AuthGuard)
   applyCoupon(@Param('couponName') couponName: string, @Req() req) {
@@ -54,6 +61,8 @@ export class CartController {
   //  @Route  GET /api/v1/cart
   //  @access Private [User]
   @Get()
+  @ApiOperation({ summary: 'Get the cart for the user' })
+  @ApiResponse({ status: 200, description: 'Cart retrieved successfully' })
   @Roles(['user'])
   @UseGuards(AuthGuard)
   findOneForUser(@Req() req) {
@@ -68,6 +77,8 @@ export class CartController {
   //  @Route  PATCH /api/v1/cart/:productId
   //  @access Private [User]
   @Patch(':productId')
+  @ApiOperation({ summary: 'Update the quantity or color of an item in the cart' })
+  @ApiResponse({ status: 200, description: 'Cart item updated successfully' })
   @Roles(['user'])
   @UseGuards(AuthGuard)
   update(
@@ -87,6 +98,8 @@ export class CartController {
   //  @Route  DELETE /api/v1/cart/:productId
   //  @access Private [User]
   @Delete(':productId')
+  @ApiOperation({ summary: 'Remove an item from the cart' })
+  @ApiResponse({ status: 200, description: 'Cart item removed successfully' })
   @Roles(['user'])
   @UseGuards(AuthGuard)
   remove(@Param('productId') productId: string, @Req() req) {
@@ -103,6 +116,8 @@ export class CartController {
   //  @Route  GET /api/v1/cart/admin/:userId
   //  @access Private [Admin]
   @Get('/admin/:userId')
+  @ApiOperation({ summary: 'Get a specific user\'s cart for admin' })
+  @ApiResponse({ status: 200, description: 'User cart retrieved successfully' })
   @Roles(['admin'])
   @UseGuards(AuthGuard)
   findOneForAdmin(@Param('userId') userId: string) {
@@ -112,6 +127,8 @@ export class CartController {
   //  @Route  GET /api/v1/cart/admin
   //  @access Private [Admin]
   @Get('/admin')
+  @ApiOperation({ summary: 'Get all carts for admin' })
+  @ApiResponse({ status: 200, description: 'All carts retrieved successfully' })
   @Roles(['admin'])
   @UseGuards(AuthGuard)
   findAllForAdmin() {

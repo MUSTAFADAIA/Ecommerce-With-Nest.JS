@@ -19,8 +19,10 @@ import { UpdateUserDto } from './dto/update-user.dto';
 import { I18n, I18nContext, I18nValidationExceptionFilter } from 'nestjs-i18n';
 import { Roles } from './decorator/roles.decorator';
 import { AuthGuard } from './guard/auth.guard';
+import { ApiTags, ApiOperation, ApiResponse } from '@nestjs/swagger';
 
-@Controller('v1/user')
+@ApiTags('users') 
+@Controller('user')
 export class UserController {
   constructor(private readonly userService: UserService) {}
 
@@ -28,6 +30,8 @@ export class UserController {
   //  @Route  POST /api/v1/user
   //  @access Private [admin]
   @Post()
+  @ApiOperation({ summary: 'Create a new user' })
+  @ApiResponse({ status: 201, description: 'User created successfully' })
   @Roles(['admin'])
   @UseGuards(AuthGuard)
   @UseFilters(new I18nValidationExceptionFilter())
@@ -42,6 +46,8 @@ export class UserController {
   //  @Route  GET /api/v1/user
   //  @access Private [admin]
   @Get()
+   @ApiOperation({ summary: 'Get all users' })
+  @ApiResponse({ status: 200, description: 'List of users returned successfully' })
   @Roles(['admin'])
   @UseGuards(AuthGuard)
   findAll(@Query() query, @I18n() i18n: I18nContext) {
@@ -51,6 +57,8 @@ export class UserController {
   //  @Route  GET /api/v1/user/:id
   //  @access Private [admin]
   @Get(':id')
+   @ApiOperation({ summary: 'Get one users' })
+  @ApiResponse({ status: 200, description: ' user returned successfully' })
   @Roles(['admin'])
   @UseGuards(AuthGuard)
   findOne(@Param('id') id: string, @I18n() i18n: I18nContext) {
@@ -60,6 +68,8 @@ export class UserController {
   //  @Route  UPDATE /api/v1/user/:id
   //  @access Private [admin]
   @Patch(':id')
+   @ApiOperation({ summary: 'update one user' })
+  @ApiResponse({ status: 200, description: 'User update successfully' })
   @Roles(['admin'])
   @UseGuards(AuthGuard)
   update(
@@ -74,6 +84,8 @@ export class UserController {
   //  @Route  DELETE /api/v1/user/:id
   //  @access Private [admin]
   @Delete(':id')
+  @ApiOperation({ summary: 'Delete one user' })
+  @ApiResponse({ status: 200, description: 'User deleted successfully' })
   @Roles(['admin'])
   @UseGuards(AuthGuard)
   remove(@Param('id') id: string, @I18n() i18n: I18nContext) {
@@ -90,6 +102,8 @@ export class UserMeController {
   //  @Route  GET /api/v1/user/me
   //  @access Private [user, admin]
   @Get()
+  @ApiOperation({ summary: 'Get my account data' })
+  @ApiResponse({ status: 200, description: 'User data returned successfully' })
   @Roles(['user', 'admin'])
   @UseGuards(AuthGuard)
   getMe(@Req() req, @I18n() i18n: I18nContext) {
@@ -99,6 +113,8 @@ export class UserMeController {
   //  @Route  PATCH /api/v1/user/me
   //  @access Private [user, admin]
   @Patch()
+  @ApiOperation({ summary: 'Update my account data' })
+  @ApiResponse({ status: 200, description: 'User updated successfully' })
   @Roles(['user', 'admin'])
   @UseGuards(AuthGuard)
   updateMe(
@@ -113,6 +129,8 @@ export class UserMeController {
   //  @Route  DELETE /api/v1/user/me
   //  @access Private [user]
   @Delete()
+  @ApiOperation({ summary: 'Delete my account' })
+  @ApiResponse({ status: 200, description: 'User deleted successfully' })
   @Roles(['user'])
   @UseGuards(AuthGuard)
   deleteMe(@Req() req, @I18n() i18n: I18nContext) {

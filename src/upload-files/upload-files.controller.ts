@@ -13,7 +13,8 @@ import { CloudinaryService } from './upload-files.service';
 import { FileInterceptor, FilesInterceptor } from '@nestjs/platform-express';
 import { Roles } from 'src/user/decorator/roles.decorator';
 import { AuthGuard } from 'src/user/guard/auth.guard';
-
+import { ApiTags, ApiOperation, ApiResponse } from '@nestjs/swagger';
+@ApiTags('Upload Files')
 
 @Controller('image')
 export class UploadFilesController {
@@ -23,6 +24,8 @@ export class UploadFilesController {
   //  @Route  POST /api/v1/image/upload
   //  @access Private [admin, user]
   @Post('upload')
+  @ApiOperation({ summary: 'Upload a single image or file' })
+  @ApiResponse({ status: 201, description: 'Image or file uploaded successfully' })
   @Roles(['admin', 'user'])
   @UseGuards(AuthGuard)
   @UseInterceptors(FileInterceptor('file'))
@@ -46,6 +49,8 @@ export class UploadFilesController {
   //  @Route  POST /api/v1/image/uploads
   //  @access Private [admin]
   @Post('uploads')
+  @ApiOperation({ summary: 'Upload multiple images or files' })
+  @ApiResponse({ status: 201, description: 'Images or files uploaded successfully' })
   @Roles(['admin'])
   @UseGuards(AuthGuard)
   @UseInterceptors(FilesInterceptor('files[]', 5))

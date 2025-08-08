@@ -14,8 +14,10 @@ import { SubCreateCategoryDto } from './dto/create-sub-category.dto';
 import { UpdateSubCategoryDto } from './dto/update-sub-category.dto';
 import { Roles } from 'src/user/decorator/roles.decorator';
 import { AuthGuard } from 'src/user/guard/auth.guard';
+import { ApiTags, ApiOperation, ApiResponse } from '@nestjs/swagger';
 
 
+@ApiTags('Sub Category')
 @Controller('sub-category')
 export class SubCategoryController {
   constructor(private readonly subCategoryService: SubCategoryService) {}
@@ -24,6 +26,8 @@ export class SubCategoryController {
   //  @Route  POST /api/v1/sub-category
   //  @access Private [Amdin]
   @Post()
+  @ApiOperation({ summary: 'Create a new sub-category' })
+  @ApiResponse({ status: 201, description: 'Sub-category created successfully' })
   @Roles(['admin'])
   @UseGuards(AuthGuard)
   create(
@@ -37,6 +41,8 @@ export class SubCategoryController {
   //  @Route  GET /api/v1/sub-category
   //  @access Public
   @Get()
+  @ApiOperation({ summary: 'Get all sub-categories' })
+  @ApiResponse({ status: 200, description: 'Sub-categories retrieved successfully' })
   findAll() {
     return this.subCategoryService.findAll();
   }
@@ -45,6 +51,8 @@ export class SubCategoryController {
   //  @Route  GET /api/v1/sub-category/:id
   //  @access Public
   @Get(':id')
+  @ApiOperation({ summary: 'Get a specific sub-category by ID' })
+  @ApiResponse({ status: 200, description: 'Sub-category retrieved successfully' })
   findOne(@Param('id') id: string) {
     return this.subCategoryService.findOne(id);
   }
@@ -53,6 +61,8 @@ export class SubCategoryController {
   //  @Route  UPDATE /api/v1/sub-category/:id
   //  @access Private [Amdin]
   @Patch(':id')
+  @ApiOperation({ summary: 'Update a sub-category' })
+  @ApiResponse({ status: 200, description: 'Sub-category updated successfully' })
   @Roles(['admin'])
   @UseGuards(AuthGuard)
   update(
@@ -67,6 +77,8 @@ export class SubCategoryController {
   //  @Route  DELETE /api/v1/sub-category/:id
   //  @access Private [Amdin]
   @Delete(':id')
+  @ApiOperation({ summary: 'Delete a sub-category' })
+  @ApiResponse({ status: 200, description: 'Sub-category deleted successfully' })
   @Roles(['admin'])
   @UseGuards(AuthGuard)
   remove(@Param('id') id: string) {

@@ -14,6 +14,8 @@ import { CreateBrandDto } from './dto/create-brand.dto';
 import { UpdateBrandDto } from './dto/update-brand.dto';
 import { Roles } from 'src/user/decorator/roles.decorator';
 import { AuthGuard } from 'src/user/guard/auth.guard';
+import { ApiTags, ApiOperation, ApiResponse } from '@nestjs/swagger';
+@ApiTags('Brand')
 
 @Controller('brand')
 export class BrandController {
@@ -23,6 +25,8 @@ export class BrandController {
   //  @Route  POST /api/v1/brand
   //  @access Private [Amdin]
   @Post()
+  @ApiOperation({ summary: 'Create a new brand' })
+  @ApiResponse({ status: 200, description: 'Brand Create successfully' })
   @Roles(['admin'])
   @UseGuards(AuthGuard)
   create(
@@ -36,6 +40,8 @@ export class BrandController {
   //  @Route  GET /api/v1/brand
   //  @access Public
   @Get()
+  @ApiOperation({ summary: 'Get all brands' })
+  @ApiResponse({ status: 200, description: 'List of all brands' })
   findAll() {
     return this.brandService.findAll();
   }
@@ -44,6 +50,8 @@ export class BrandController {
   //  @Route  GET /api/v1/brand
   //  @access Public
   @Get(':id')
+  @ApiOperation({ summary: 'Get a brand by ID' })
+  @ApiResponse({ status: 200, description: 'Brand details' })
   findOne(@Param('id') id: string) {
     return this.brandService.findOne(id);
   }
@@ -52,7 +60,10 @@ export class BrandController {
   //  @Route  PATCH /api/v1/brand
   //  @access Private [admin]
   @Patch(':id')
+  @ApiOperation({ summary: 'Update a brand by ID' })
+  @ApiResponse({ status: 200, description: 'Brand updated successfully' })
   @Roles(['admin'])
+
   @UseGuards(AuthGuard)
   update(
     @Param('id') id: string,
@@ -66,6 +77,8 @@ export class BrandController {
   //  @Route  DELETE /api/v1/brand
   //  @access Private [admin]
   @Delete(':id')
+  @ApiOperation({ summary: 'Delete a brand by ID' })
+  @ApiResponse({ status: 200, description: 'Brand deleted successfully' })
   @Roles(['admin'])
   @UseGuards(AuthGuard)
   remove(@Param('id') id: string) {

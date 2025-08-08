@@ -16,8 +16,10 @@ import { CreateRequestProductDto } from './dto/create-request-product.dto';
 import { UpdateRequestProductDto } from './dto/update-request-product.dto';
 import { Roles } from 'src/user/decorator/roles.decorator';
 import { AuthGuard } from 'src/user/guard/auth.guard';
+import { ApiTags, ApiOperation, ApiResponse } from '@nestjs/swagger';
 
 
+@ApiTags('Request Product')
 @Controller('req-product')
 export class RequestProductController {
   constructor(private readonly requestProductService: RequestProductService) {}
@@ -26,6 +28,8 @@ export class RequestProductController {
   //  @Route  POST /api/v1/req-product
   //  @access Private [user]
   @Post()
+  @ApiOperation({ summary: 'Create a new request product' })
+  @ApiResponse({ status: 201, description: 'Request product created successfully' })
   @Roles(['user'])
   @UseGuards(AuthGuard)
   create(
@@ -46,6 +50,8 @@ export class RequestProductController {
   //  @Route  GET /api/v1/req-product
   //  @access Private [Admin]
   @Get()
+  @ApiOperation({ summary: 'Get all request products' })
+  @ApiResponse({ status: 200, description: 'Request products retrieved successfully' })
   @Roles(['admin'])
   @UseGuards(AuthGuard)
   findAll() {
@@ -56,6 +62,8 @@ export class RequestProductController {
   //  @Route  GET /api/v1/req-product
   //  @access Private [Admin, User]
   @Get(':id')
+  @ApiOperation({ summary: 'Get a specific request product by ID' })
+  @ApiResponse({ status: 200, description: 'Request product retrieved successfully' })
   @Roles(['admin', 'user'])
   @UseGuards(AuthGuard)
   findOne(@Param('id') id: string, @Req() req) {
@@ -66,6 +74,8 @@ export class RequestProductController {
   //  @Route  PATCH /api/v1/req-product
   //  @access Private [User]
   @Patch(':id')
+  @ApiOperation({ summary: 'Update a request product' })
+  @ApiResponse({ status: 200, description: 'Request product updated successfully' })
   @Roles(['user'])
   @UseGuards(AuthGuard)
   update(
@@ -87,6 +97,8 @@ export class RequestProductController {
   //  @Route  DELETE /api/v1/req-product
   //  @access Private [User]
   @Delete(':id')
+  @ApiOperation({ summary: 'Delete a request product' })
+  @ApiResponse({ status: 200, description: 'Request product deleted successfully' })
   @Roles(['user'])
   @UseGuards(AuthGuard)
   remove(@Param('id') id: string, @Req() req) {

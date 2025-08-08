@@ -14,7 +14,9 @@ import { Roles } from 'src/user/decorator/roles.decorator';
 import { AuthGuard } from 'src/user/guard/auth.guard';
 import { CreateSuppliersDto } from './dto/create-supplier.dto';
 import { UpdateSupplierDto } from './dto/update-supplier.dto';
+import { ApiTags, ApiOperation, ApiResponse } from '@nestjs/swagger';
 
+@ApiTags('Suppliers')
 @Controller('suppliers')
 export class SuppliersController {
   constructor(private readonly suppliersService: SuppliersService) {}
@@ -23,6 +25,8 @@ export class SuppliersController {
   //  @Route  POST /api/v1/suppliers
   //  @access Private [Amdin]
   @Post()
+  @ApiOperation({ summary: 'Create a new supplier' })
+  @ApiResponse({ status: 201, description: 'Supplier created successfully' })
   @Roles(['admin'])
   @UseGuards(AuthGuard)
   create(
@@ -35,7 +39,9 @@ export class SuppliersController {
   //  @docs   Any User Can get all Suppliers
   //  @Route  GET /api/v1/suppliers
   //  @access Public
-  @Get()
+  @Get()  
+  @ApiOperation({ summary: 'Get all suppliers' })
+  @ApiResponse({ status: 200, description: 'Suppliers retrieved successfully' })
   findAll() {
     return this.suppliersService.findAll();
   }
@@ -44,6 +50,8 @@ export class SuppliersController {
   //  @Route  GET /api/v1/suppliers
   //  @access Public
   @Get(':id')
+  @ApiOperation({ summary: 'Get a specific supplier by ID' })
+  @ApiResponse({ status: 200, description: 'Supplier retrieved successfully' })
   findOne(@Param('id') id: string) {
     return this.suppliersService.findOne(id);
   }
@@ -52,6 +60,8 @@ export class SuppliersController {
   //  @Route  PATCH /api/v1/suppliers
   //  @access Private [admin]
   @Patch(':id')
+  @ApiOperation({ summary: 'Update a supplier' })
+  @ApiResponse({ status: 200, description: 'Supplier updated successfully' })
   @Roles(['admin'])
   @UseGuards(AuthGuard)
   update(
@@ -66,6 +76,8 @@ export class SuppliersController {
   //  @Route  DELETE /api/v1/suppliers
   //  @access Private [admin]
   @Delete(':id')
+  @ApiOperation({ summary: 'Delete a supplier' })
+  @ApiResponse({ status: 200, description: 'Supplier deleted successfully' })
   @Roles(['admin'])
   @UseGuards(AuthGuard)
   remove(@Param('id') id: string) {

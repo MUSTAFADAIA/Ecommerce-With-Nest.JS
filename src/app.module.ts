@@ -25,7 +25,6 @@ import {
 } from 'nestjs-i18n';
 import { join } from 'path';
 import { ThrottlerModule } from '@nestjs/throttler';
-import { OAuthModule } from './oauth/oauth.module';
 
 @Module({
   imports: [
@@ -38,7 +37,7 @@ import { OAuthModule } from './oauth/oauth.module';
     I18nModule.forRoot({
       fallbackLanguage: 'en',
       loaderOptions: {
-        path: join(__dirname, '/apps/api/i18n/'),
+        path: join(__dirname, '../i18n'),
         watch: true,
       },
       resolvers: [
@@ -49,7 +48,7 @@ import { OAuthModule } from './oauth/oauth.module';
     }),
 
     ConfigModule.forRoot(),
-    MongooseModule.forRoot(process.env.DB_URL || '12315'),
+    MongooseModule.forRoot(process.env.DB_URL || 'mongodb+srv://mustafa3:HQoSAkO7FGa1A81C@cluster0.tigmoa7.mongodb.net/ecommerceN?retryWrites=true&w=majority'),
     UserModule,
     JwtModule.register({
       global: true,
@@ -57,7 +56,6 @@ import { OAuthModule } from './oauth/oauth.module';
       signOptions: { expiresIn: '1d' },
     }),
     AuthModule,
-    OAuthModule,
     MailerModule.forRoot({
       transport: {
         service: 'gmail',

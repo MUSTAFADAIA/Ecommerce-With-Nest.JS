@@ -20,7 +20,9 @@ import { AcceptOrderCashDto, CreateOrderDto } from './dto/create-order.dto';
 import { Request } from 'express';
 import { Roles } from 'src/user/decorator/roles.decorator';
 import { AuthGuard } from 'src/user/guard/auth.guard';
+import { ApiTags, ApiOperation, ApiResponse } from '@nestjs/swagger';
 
+@ApiTags('Order')
 @Controller('cart/checkout')
 export class OrderCheckoutController {
   constructor(private readonly orderService: OrderService) {}
@@ -29,6 +31,8 @@ export class OrderCheckoutController {
   //  @Route  POST /api/v1/cart/checkout/:paymentMethodType?success_url=https://ecommerce-nestjs.com&cancel_url=https://ecommerce-nestjs.com
   //  @access Private [User]
   @Post(':paymentMethodType')
+  @ApiOperation({ summary: 'Create an order and checkout session' })
+  @ApiResponse({ status: 201, description: 'Order created successfully' })
   @Roles(['user'])
   @UseGuards(AuthGuard)
   create(
@@ -67,6 +71,11 @@ export class OrderCheckoutController {
   //  @Route  PATCH /api/v1/cart/checkout/:orderId/cash
   //  @access Private [User]
   @Patch(':orderId/cash')
+  @ApiOperation({ summary: 'Update order payment status to cash' })
+  @ApiResponse({
+    status: 200,
+    description: 'Order payment updated successfully',
+  })
   @Roles(['admin'])
   @UseGuards(AuthGuard)
   updatePaidCash(
@@ -78,6 +87,7 @@ export class OrderCheckoutController {
   }
 }
 
+@ApiTags('Checkout')
 @Controller('checkout/session')
 export class CheckoutCardController {
   constructor(private readonly orderService: OrderService) {}
@@ -86,6 +96,11 @@ export class CheckoutCardController {
   //  @Route  PATCH /api/v1/checkout/session
   //  @access Private [Stripe]
   @Post()
+  @ApiOperation({ summary: 'Update order payment status from Stripe webhook' })
+  @ApiResponse({
+    status: 200,
+    description: 'Order payment updated successfully',
+  })
   updatePaidCard(
     @Headers('stripe-signature') sig,
     @Req() request: RawBodyRequest<Request>,
@@ -99,6 +114,7 @@ export class CheckoutCardController {
   }
 }
 
+@ApiTags('Order')
 @Controller('order/user')
 export class OrderForUserController {
   constructor(private readonly orderService: OrderService) {}
@@ -107,6 +123,8 @@ export class OrderForUserController {
   //  @Route  GET /api/v1/order/user
   //  @access Private [User]
   @Get()
+  @ApiOperation({ summary: 'Get all orders for the user' })
+  @ApiResponse({ status: 200, description: 'Orders retrieved successfully' })
   @Roles(['user'])
   @UseGuards(AuthGuard)
   findAllOrdersOnUser(@Req() req) {
@@ -117,6 +135,8 @@ export class OrderForUserController {
     return this.orderService.findAllOrdersOnUser(user_id);
   }
 }
+
+@ApiTags('Order')
 @Controller('order/admin')
 export class OrderForAdminController {
   constructor(private readonly orderService: OrderService) {}
@@ -125,6 +145,8 @@ export class OrderForAdminController {
   //  @Route  GET /api/v1/order/admin
   //  @access Private [Admin]
   @Get()
+  @ApiOperation({ summary: 'Get all orders for admin' })
+  @ApiResponse({ status: 200, description: 'Orders retrieved successfully' })
   @Roles(['admin'])
   @UseGuards(AuthGuard)
   findAllOrders() {
@@ -134,6 +156,8 @@ export class OrderForAdminController {
   //  @Route  GET /api/v1/order/admin/:userId
   //  @access Private [Admin]
   @Get(':userId')
+  @ApiOperation({ summary: 'Get all orders for a specific user by ID' })
+  @ApiResponse({ status: 200, description: 'Orders retrieved successfully' })
   @Roles(['admin'])
   @UseGuards(AuthGuard)
   findAllOrdersByUserId(@Param('userId') userId: string) {
