@@ -48,7 +48,7 @@ import { ThrottlerModule } from '@nestjs/throttler';
     }),
 
     ConfigModule.forRoot(),
-    MongooseModule.forRoot(process.env.DB_URL || 'mongodb+srv://mustafa3:HQoSAkO7FGa1A81C@cluster0.tigmoa7.mongodb.net/ecommerceN?retryWrites=true&w=majority'),
+    MongooseModule.forRoot(process.env.DB_URL || '123123'),
     UserModule,
     JwtModule.register({
       global: true,
